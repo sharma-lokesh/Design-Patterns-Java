@@ -1,0 +1,9 @@
+AbstractFactory class declares only an interface for creating the products. 
+The actual creation is the task of the ConcreteProduct classes, where a good approach is applying the 
+Factory Method design pattern for each product of the family.
+
+
+Extending factories can be done by using one Create method for all products and attaching information 
+about the type of product needed.
+
+It is factory of factories, and generally used when there is more than one product involved.

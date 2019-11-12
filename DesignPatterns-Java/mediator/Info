@@ -1,0 +1,37 @@
+The mediator pattern is used to takes the role of a hub or router and facilitates the communication between many classes. 
+A similarity can be made with the database systems. 
+The mediator transform a hard to implement relation of many to many, where each calls has to communicate with each other class, in 2 relations, 
+easy to implement, of many to one and one to many, where the communication is handled by the mediator class.
+
+Example:
+The chat application is an example of the mediator pattern. 
+In a chat application we can have several participants. It's not a good idea to connect each participant to all the others because the number of 
+connections would be really high, there would be technical problems due to proxies and firewalls, etc... . 
+The most appropriate solution is to have a hub where all participants will connect; this hub is just the mediator class.
+
+Participants:
+Chatroom(Mediator) - Defines the interface for interacting with participants
+ChatroomImpl (ConcreteMediator) - implements the operations defined by the Chatroom interface. The operations are managing the interactions between the objects: when one participant sends a message, 
+								  the message is sent to the other participants.
+Participant(Collegue) - defines an interface for the participants.
+HumanParticipant, Bot (ConcreteCollegue) - implements participants; the participant can be a human or a bot, 
+											each one having a distinct implementation but implementing the same interface. 
+											Each participant will keep only a reference to the mediator.
+Example 2:
+Air traffic controller is a great example of mediator pattern where the airport control room works as a mediator for communication between different flights. 
+Mediator works as a router between objects and it can have it’s own logic to provide way of communication.	
+
+										
+Related Patterns
+There are a few design patterns that are closely related to the Mediator pattern and are often used in conjunction with it.
+
+Facade Pattern - a simplified mediator becomes a facade pattern if the mediator is the only active class and the colleagues are passive classes. 
+				A facade pattern is just an implementation of the mediator pattern where mediator is the only object triggering and invoking actions on
+				passive colleague classes. The Facade is being call by some external classes.
+Adapter Pattern - the mediator patter just "mediate" the requests between the colleague classes. 
+				  It is not supposed to change the messages it receives and sends; if it alters those messages then it is an Adapter pattern.
+Observer Pattern - the observer and mediator are similar patterns, solving the same problem.
+				  The main difference between them is the problem they address.
+				  The observer pattern handles the communication between observers and subjects or subject. 
+				  It's very probable to have new observable objects added. On the other side in the mediator pattern the mediator class 
+				  is the the most likely class to be inherited.

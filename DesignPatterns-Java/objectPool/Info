@@ -1,0 +1,36 @@
+Specific problems and implementation
+
+Singleton reusable pool - The reusable pool is implemented as a singleton. The reusable pool should be accesible only to the Connection object.
+
+1. Limited number of resources in the pool 
+The connection pool is responsable for sharing and reusing the resources. Sometimes the resources have to be well managed only because they affects the performace, 
+but there are situations when the number of resources can not exceed a specific limit. In this case the Resource pool check the number of instantiated resources and of the 
+limit is reach it will wait for a resource to be released,  it will throw an exception or it will return a null value. In any of the last 2 situations the Client should be 
+notified that the action failed because there are no available resources.
+
+2. Handling situations when creating a new resource fails
+There are many reasons when the ResourcePool.acquireConnectionImpl method fails to return a resource. It might happens because there are not available resources or some exception occured. 
+Either way the client should be notified about his.
+
+3. Syncronization
+In order to work in a multithreading environment the methods that are used by differnt threads should be synchronized. There are only three methonds in the ResourcePool object that have to be synchronized:
+-    getInstance should be synchronized or should contain a synchronized block. For details check the singleton multithreading implementation.
+-    acquireConnectionImpl - this menthod returns a resource and should be synchronized not to return the same resource to two different clients running tin different threads.
+-    releaseConnectionImpl - this method release a resource. Ussually it doesn't have to be synchronized a resource is allocated only by one client. Internally some blocks might need to be synchronized
+	 (depending on the method implementation and the internal structures used to keep the pool.).
+
+4. Expired resources(unused but still reserved)
+The main problem for the Object Pool Pattern is that the objects should be released by the client when it finishes using them. There are plenty of examples when the client ”forget” to release the resources. 
+Let's take the example the the database connections when connection are not closed/released after they are used. This seems a minor problem but there are many applications crushing for this reason.
+
+In object pool can be implemented a mechanism to check when a specific resource was used last time and if the time expired, to return it to the available resource pool. 
+
+
+Hot Points
+-    When the Object Pool pattern is used the objects should be marked as available(released) by the client after they are used, so the pool will be aware about this. 
+     This is the main drawback because the client should do this and it's a common situation when database connection are not released afer they are used. 
+     To overcome this a mechanism can be implemented to release resources if they are not used for a period of time.
+-    Creating the resources might fail and this case should be treated carefully. When there is no available resource(beacause the number is limited or creating a new one failed) the client should be notified about it.
+
+Conclusion
+Althrough the object pool is handling the object instantiation it's main purpose is to provide a way for the clients to reuse the objects like they are new objects, without being shared and reused.

@@ -1,0 +1,7 @@
+It is basic implementation of unit of work pattern.
+1. If you need proper implementation for roll back, shallow copy concept has to be considered for keeping the copy of
+   persisted domain object, when roll back is done, previous copy of object is restored.
+2. If you need to keep record of dependencies (one to one, one to many, many to many) then which object is supposed to
+   persisted before has to be taken care.
+
+This is why we develop custom unit of work, on ORM tool.

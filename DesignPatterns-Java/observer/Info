@@ -1,0 +1,57 @@
+Credits for implementation and learning : 
+https://dzone.com/articles/the-observer-pattern-using-modern-java
+Refer above link, if you wish to go for thread-safe implementation as well.
+
+For annotation based implementation : 
+https://stackoverflow.com/questions/13362636/a-generic-observer-pattern-in-java
+
+
+Defines a one-to-many dependency between objects so that when one object changes state, 
+all its dependents are notified and updated automatically.
+
+The observer pattern is used when:
+the change of a state in one object must be reflected in another object without keeping the objects tight coupled.
+the framework we are writing needs to be enhanced in future with new observers with minimal changes.
+
+Some Classical Examples:
+Model View Controller Pattern - The observer pattern is used in the model view controller (MVC) architectural pattern. 
+								In MVC the this pattern is used to decouple the model from the view. View represents the 
+								Observer and the model is the Observable object.
+Event management - This is one of the domains where the Observer patterns is extensively used. 
+				   Swing and .Net are extensively using the Observer pattern for implementing the events mechanism.
+
+				   
+Specific Implementation Problems
+
+1. Many subjects to Many observers
+	It's not a common situation but there are cases when a there are many observers that need to observe more than one subject. 
+	In this case the observer need to be notified not only about the change, but also which is the subject with the state changed. 
+	This can be realized very simple by adding to the subjects reference in the update notification method. The subject will pass a reference to itself(this) to the when notify the observer.
+
+2. Who triggers the update?
+	The communication between the subject and its observers is done through the notify method declared in observer interface. 
+	But who it cat be triggered from either subject or observer object. Usually the notify method is triggered by the subject when it's state is changed. 
+	But sometimes when the updates are frequent the consecutive changes in the subject will determine many unnecessary refresh operations in the observer. 
+	In order to make this process more efficient the observer can be made responsible for starting the notify operation when it consider necessary.
+
+3. Making sure Subject state is self-consistent before notification
+	The subject state should be consistent when the notify operation is triggered. If changes are made in the subject state after the observer is notified, it will will be refreshed with an old state. 
+	This seems hard to achieve but in practice this can be easily done when Subject subclass operations call inherited operations.
+	
+	
+Push and pull communication methods
+There are 2 methods of passing the data from the subject to the observer when the state is being changed in the subject side:
+
+Push model - 
+	The subjects send detailed information about the change to the observer whether it uses it or not. 
+	Because the subject needs to send the detailed information to the observer this might be inefficient when a large amount of data needs to be sent and it is not used. 
+	Another aaproach would be to send only the information required by the observer. In this case the subject should be able to distinguish between different types of observers and to know 
+	the required data of each of them, meaning that the subject layer is more coupled to observer layer.
+
+Pull model - 
+	The subject just notifies the observers when a change in his state appears and it's the responsibility of each observer to pull the required data from the subject. 
+	This can be inefficient because the communication is done in 2 steps and problems might appear in multi threading environments.
+ 
+Specifying points of interests
+	The efficiency can be improved by specifying which are the events on which each observer is interested. This can be realized by adding a new class defining an aspect. 
+	When an observer is registering it will provide the aspects in which it is interested:
